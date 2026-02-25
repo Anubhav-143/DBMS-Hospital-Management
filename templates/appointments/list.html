@@ -3,49 +3,47 @@
 {% block nav_appointments %}active{% endblock %}
 
 {% block content %}
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h2 class="fw-bold text-primary"><i class="bi bi-calendar-check"></i> Appointments</h2>
-    <a href="{% url 'appointment-add' %}" class="btn btn-primary"><i class="bi bi-plus-circle"></i> Schedule Appointment</a>
+<div class="page-header">
+    <h2>&#128197; Appointments</h2>
+    <a href="{% url 'appointment-add' %}" class="btn btn-primary">+ Schedule Appointment</a>
 </div>
 
-<div class="card shadow-sm">
-    <div class="card-body p-0">
-        <div class="table-responsive">
-            <table class="table table-hover mb-0">
-                <thead>
-                    <tr><th>#</th><th>Patient</th><th>Doctor</th><th>Date</th><th>Time</th><th>Status</th><th>Notes</th><th>Actions</th></tr>
-                </thead>
-                <tbody>
-                {% for appt in appointments %}
-                <tr>
-                    <td>{{ appt.id }}</td>
-                    <td>{{ appt.patient.name }}</td>
-                    <td>Dr. {{ appt.doctor.name }}</td>
-                    <td>{{ appt.date }}</td>
-                    <td>{{ appt.time }}</td>
-                    <td>
-                        {% if appt.status == 'Scheduled' %}<span class="badge bg-info">{{ appt.status }}</span>
-                        {% elif appt.status == 'Completed' %}<span class="badge bg-success">{{ appt.status }}</span>
-                        {% else %}<span class="badge bg-danger">{{ appt.status }}</span>{% endif %}
-                    </td>
-                    <td>{{ appt.notes|truncatechars:40|default:"-" }}</td>
-                    <td>
-                        <a href="{% url 'appointment-edit' appt.pk %}" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></a>
-                        <a href="{% url 'appointment-delete' appt.pk %}" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></a>
-                    </td>
-                </tr>
-                {% empty %}
-                <tr><td colspan="8" class="text-center text-muted py-4">No appointments scheduled yet. <a href="{% url 'appointment-add' %}">Schedule one</a>.</td></tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
+<div class="card">
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr><th>#</th><th>Patient</th><th>Doctor</th><th>Date</th><th>Time</th><th>Status</th><th>Notes</th><th>Actions</th></tr>
+            </thead>
+            <tbody>
+            {% for appt in appointments %}
+            <tr>
+                <td>{{ appt.id }}</td>
+                <td>{{ appt.patient.name }}</td>
+                <td>Dr. {{ appt.doctor.name }}</td>
+                <td>{{ appt.date }}</td>
+                <td>{{ appt.time }}</td>
+                <td>
+                    {% if appt.status == 'Scheduled' %}<span class="badge bg-info">{{ appt.status }}</span>
+                    {% elif appt.status == 'Completed' %}<span class="badge bg-success">{{ appt.status }}</span>
+                    {% else %}<span class="badge bg-danger">{{ appt.status }}</span>{% endif %}
+                </td>
+                <td>{{ appt.notes|truncatechars:40|default:"-" }}</td>
+                <td>
+                    <a href="{% url 'appointment-edit' appt.pk %}" class="btn btn-sm btn-outline-primary">&#9998;</a>
+                    <a href="{% url 'appointment-delete' appt.pk %}" class="btn btn-sm btn-outline-danger">&#128465;</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="8" class="text-center text-muted py-4">No appointments scheduled yet. <a href="{% url 'appointment-add' %}">Schedule one</a>.</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
     </div>
 </div>
 
 {% if is_paginated %}
 <nav class="mt-3">
-    <ul class="pagination justify-content-center">
+    <ul class="pagination">
         {% if page_obj.has_previous %}<li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>{% endif %}
         <li class="page-item disabled"><span class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span></li>
         {% if page_obj.has_next %}<li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>{% endif %}
