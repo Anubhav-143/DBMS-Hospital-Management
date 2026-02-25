@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}{{ title }} - HMS{% endblock %}
+{% block nav_doctors %}active{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h2>{{ title }}</h2>
+    <a href="{% url 'doctor-list' %}" class="btn btn-outline-secondary">&larr; Back</a>
+</div>
+
+<div class="card" style="max-width: 700px;">
+    <div class="card-body">
+        <form method="post">
+            {% csrf_token %}
+            <div class="row g-3">
+                {% for field in form %}
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">{{ field.label }}{% if field.field.required %} <span class="text-danger">*</span>{% endif %}</label>
+                    <input type="{{ field.field.widget.input_type }}" name="{{ field.html_name }}"
+                           value="{{ field.value|default:'' }}"
+                           class="form-control {% if field.errors %}is-invalid{% endif %}"
+                           {% if field.field.required %}required{% endif %}>
+                    {% if field.errors %}
+                        <div class="invalid-feedback">{{ field.errors|join:", " }}</div>
+                    {% endif %}
+                    {% if field.help_text %}
+                        <div class="form-text text-muted">{{ field.help_text }}</div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+            <div class="mt-4">
+                <button type="submit" class="btn btn-primary">&#10003; Save</button>
+                <a href="{% url 'doctor-list' %}" class="btn btn-outline-secondary ms-2">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

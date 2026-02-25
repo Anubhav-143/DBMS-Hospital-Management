@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}Delete Doctor - HMS{% endblock %}
+{% block nav_doctors %}active{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h2 style="color:#c62828;">&#128465; Delete Doctor</h2>
+    <a href="{% url 'doctor-list' %}" class="btn btn-outline-secondary">&larr; Back</a>
+</div>
+
+<div class="card border-danger" style="max-width: 500px;">
+    <div class="card-body">
+        <p class="fs-5">Are you sure you want to delete <strong>Dr. {{ object.name }}</strong>?</p>
+        <p class="text-muted small">This will also delete all associated appointments.</p>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">&#128465; Yes, Delete</button>
+            <a href="{% url 'doctor-list' %}" class="btn btn-outline-secondary ms-2">Cancel</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

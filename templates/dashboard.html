@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard - HMS{% endblock %}
+{% block nav_dashboard %}active{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h2>
+        <svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+        Dashboard
+    </h2>
+    <span class="text-muted">Hospital Management System</span>
+</div>
+
+<!-- Stats Cards -->
+<div class="stat-grid">
+    <div class="stat-card" style="background: linear-gradient(135deg,#1a237e,#3949ab);">
+        <div class="stat-num">{{ total_patients }}</div>
+        <div class="stat-label">Total Patients</div>
+        <a href="{% url 'patient-list' %}" class="stat-link">View all &rarr;</a>
+    </div>
+    <div class="stat-card" style="background: linear-gradient(135deg,#00695c,#00897b);">
+        <div class="stat-num">{{ total_doctors }}</div>
+        <div class="stat-label">Total Doctors</div>
+        <a href="{% url 'doctor-list' %}" class="stat-link">View all &rarr;</a>
+    </div>
+    <div class="stat-card" style="background: linear-gradient(135deg,#e65100,#ef6c00);">
+        <div class="stat-num">{{ total_appointments }}</div>
+        <div class="stat-label">Appointments</div>
+        <a href="{% url 'appointment-list' %}" class="stat-link">View all &rarr;</a>
+    </div>
+    <div class="stat-card" style="background: linear-gradient(135deg,#4a148c,#7b1fa2);">
+        <div class="stat-num">{{ total_treatments }}</div>
+        <div class="stat-label">Treatments</div>
+        <a href="{% url 'treatment-list' %}" class="stat-link">View all &rarr;</a>
+    </div>
+    <div class="stat-card" style="background: linear-gradient(135deg,#1b5e20,#2e7d32);">
+        <div class="stat-num">{{ total_bills }}</div>
+        <div class="stat-label">Total Bills</div>
+        <a href="{% url 'bill-list' %}" class="stat-link">View all &rarr;</a>
+    </div>
+    <div class="stat-card" style="background: linear-gradient(135deg,#b71c1c,#c62828);">
+        <div class="stat-num">{{ unpaid_bills }}</div>
+        <div class="stat-label">Unpaid Bills</div>
+        <a href="{% url 'bill-list' %}" class="stat-link">View all &rarr;</a>
+    </div>
+</div>
+
+<div class="dash-grid">
+    <!-- Recent Appointments -->
+    <div class="card">
+        <div class="card-header">
+            <h5>&#128197; Recent Appointments</h5>
+            <a href="{% url 'appointment-add' %}" class="btn btn-sm btn-primary">+ Add</a>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead><tr><th>Patient</th><th>Doctor</th><th>Date</th><th>Status</th></tr></thead>
+                <tbody>
+                {% for appt in recent_appointments %}
+                <tr>
+                    <td>{{ appt.patient.name }}</td>
+                    <td>Dr. {{ appt.doctor.name }}</td>
+                    <td>{{ appt.date }}</td>
+                    <td>
+                        {% if appt.status == 'Scheduled' %}<span class="badge bg-info">{{ appt.status }}</span>
+                        {% elif appt.status == 'Completed' %}<span class="badge bg-success">{{ appt.status }}</span>
+                        {% else %}<span class="badge bg-danger">{{ appt.status }}</span>{% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="4" class="text-center text-muted py-3">No appointments yet</td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Recent Patients -->
+    <div class="card">
+        <div class="card-header">
+            <h5>&#128101; Recent Patients</h5>
+            <a href="{% url 'patient-add' %}" class="btn btn-sm btn-primary">+ Add</a>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead><tr><th>Name</th><th>Age</th><th>Blood Group</th></tr></thead>
+                <tbody>
+                {% for patient in recent_patients %}
+                <tr>
+                    <td>{{ patient.name }}</td>
+                    <td>{{ patient.age }}</td>
+                    <td><span class="badge bg-secondary">{{ patient.blood_group }}</span></td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="3" class="text-center text-muted py-3">No patients yet</td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

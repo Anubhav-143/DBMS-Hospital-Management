@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block title %}{{ title }} - HMS{% endblock %}
+{% block nav_patients %}active{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h2>{{ title }}</h2>
+    <a href="{% url 'patient-list' %}" class="btn btn-outline-secondary">&larr; Back</a>
+</div>
+
+<div class="card" style="max-width: 700px;">
+    <div class="card-body">
+        <form method="post">
+            {% csrf_token %}
+            <div class="row g-3">
+                {% for field in form %}
+                <div class="{% if field.name == 'address' %}col-md-12{% else %}col-md-6{% endif %}">
+                    <label class="form-label fw-semibold">{{ field.label }}{% if field.field.required %} <span class="text-danger">*</span>{% endif %}</label>
+                    {% if field.field.widget.input_type == 'select' %}
+                        <select name="{{ field.html_name }}" class="form-select {% if field.errors %}is-invalid{% endif %}" {% if field.field.required %}required{% endif %}>
+                            {% for val, text in field.field.choices %}
+                            <option value="{{ val }}" {% if field.value == val|stringformat:"s" %}selected{% endif %}>{{ text }}</option>
+                            {% endfor %}
+                        </select>
+                    {% elif field.field.widget.input_type == 'textarea' %}
+                        <textarea name="{{ field.html_name }}" class="form-control {% if field.errors %}is-invalid{% endif %}" rows="3">{{ field.value|default:'' }}</textarea>
+                    {% elif field.field.widget.input_type == 'checkbox' %}
+                        <div class="form-check mt-2">
+                            <input type="checkbox" name="{{ field.html_name }}" class="form-check-input" id="{{ field.id_for_label }}" {% if field.value %}checked{% endif %}>
+                            <label class="form-check-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        </div>
+                    {% else %}
+                        <input type="{{ field.field.widget.input_type }}" name="{{ field.html_name }}"
+                               value="{{ field.value|default:'' }}"
+                               class="form-control {% if field.errors %}is-invalid{% endif %}"
+                               {% if field.field.required %}required{% endif %}>
+                    {% endif %}
+                    {% if field.errors %}
+                        <div class="invalid-feedback">{{ field.errors|join:", " }}</div>
+                    {% endif %}
+                    {% if field.help_text %}
+                        <div class="form-text text-muted">{{ field.help_text }}</div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+            <div class="mt-4">
+                <button type="submit" class="btn btn-primary">&#10003; Save</button>
+                <a href="{% url 'patient-list' %}" class="btn btn-outline-secondary ms-2">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
