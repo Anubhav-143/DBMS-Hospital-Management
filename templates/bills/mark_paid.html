@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}Mark Bill as Paid - HMS{% endblock %}
+{% block nav_bills %}active{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold text-success"><i class="bi bi-cash-coin"></i> Mark Bill as Paid</h2>
+    <a href="{% url 'bill-list' %}" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i> Back</a>
+</div>
+
+<div class="card shadow-sm" style="max-width: 500px;">
+    <div class="card-body">
+        <table class="table table-borderless">
+            <tr><th>Bill #</th><td>{{ bill.id }}</td></tr>
+            <tr><th>Patient</th><td>{{ bill.patient.name }}</td></tr>
+            <tr><th>Amount</th><td><strong>${{ bill.amount }}</strong></td></tr>
+            <tr><th>Date Issued</th><td>{{ bill.date_issued }}</td></tr>
+        </table>
+        <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Payment Method <span class="text-danger">*</span></label>
+                <select name="payment_method" class="form-select" required>
+                    <option value="Cash">Cash</option>
+                    <option value="Card">Card</option>
+                    <option value="Insurance">Insurance</option>
+                    <option value="Online">Online</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-success"><i class="bi bi-check-circle"></i> Confirm Payment</button>
+            <a href="{% url 'bill-list' %}" class="btn btn-outline-secondary ms-2">Cancel</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

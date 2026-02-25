@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}Delete Appointment - HMS{% endblock %}
+{% block nav_appointments %}active{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold text-danger"><i class="bi bi-trash"></i> Delete Appointment</h2>
+    <a href="{% url 'appointment-list' %}" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i> Back</a>
+</div>
+
+<div class="card shadow-sm border-danger" style="max-width: 500px;">
+    <div class="card-body">
+        <p class="fs-5">Are you sure you want to delete this appointment?</p>
+        <p><strong>{{ object.patient.name }}</strong> with <strong>Dr. {{ object.doctor.name }}</strong> on <strong>{{ object.date }}</strong></p>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger"><i class="bi bi-trash"></i> Yes, Delete</button>
+            <a href="{% url 'appointment-list' %}" class="btn btn-outline-secondary ms-2">Cancel</a>
+        </form>
+    </div>
+</div>
+{% endblock %}
